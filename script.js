@@ -9,7 +9,7 @@ const defaultData = {
     { title: "Instagram", url: "https://instagram.com/itsfoxtea", icon: "fa-brands fa-instagram" },
     { title: "Twitter", url: "https://x.com/ItsFoxTea", icon: "fa-brands fa-twitter" },
     { title: "TikTok", url: "https://tiktok.com/@itsfoxtea", icon: "fa-brands fa-tiktok" },
-    { title: "not working button ", url: "https://foxtea-beep.github.io/FrizyFox/", icon: "fa-solid fa-xmark" }
+    { title: "not working button ", url: "https://foxtea-beep.github.io/FrizyFox_OLD/", icon: "fa-solid fa-xmark" }
   ]
 };
 
