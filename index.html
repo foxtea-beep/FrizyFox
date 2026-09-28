@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FrizyFox</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark-glass">
+
+  <!-- Floating Action Toolbar -->
+  <div class="toolbar">
+    <!-- Gallery Toggle Button -->
+    <button class="btn-icon" id="galleryToggleBtn" title="Toggle Gallery View">
+      <i class="fa-solid fa-images"></i>
+    </button>
+  </div>
+
+  <!-- Main Card Container -->
+  <main class="container">
+    
+    <!-- Profile Header -->
+    <header class="profile-card">
+      <div class="avatar-container">
+        <img id="profileAvatar" src="images/FrizyFox.PNG" alt="Profile Picture" class="avatar">
+      </div>
+
+      <h1 class="profile-name" id="profileName">FrizyFox</h1>
+      <p class="profile-handle" id="profileHandle">@ItsFoxTea</p>
+      
+      <p class="profile-bio" id="profileBio"></p>
+    </header>
+
+    <!-- Hidden Image Gallery Section -->
+    <section class="gallery-card" id="galleryCard" style="display: none;">
+      <div class="gallery-header">
+        <i class="fa-solid fa-camera"></i>
+        <span>My sona art :3</span>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Add your images here -->
+        <div class="gallery-item">
+          <img src="image/gallery/one.jpeg" alt="Image Unavailable">
+        </div>
+        <div class="gallery-item">
+          <img src="image/gallery/two.jpg" alt="Image Unavailable">
+        </div>
+        <div class="gallery-item">
+          <img src="image/gallery/three.png" alt="Image Unavailable">
+        </div>
+        <div class="gallery-item">
+          <img src="image/gallery/four.jpg" alt="Image Unavailable">
+        </div>
+        <div class="gallery-item">
+          <img src="image/gallery/five.png" alt="Image Unavailable">
+        </div>
+        <div class="gallery-item">
+          <img src="" alt="More images coming soon!">
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Heading Above Links -->
+    <div class="section-heading" id="sectionHeading">My Social Links</div>
+
+    <!-- Social Links Stack -->
+    <section class="links-section" id="linksList">
+      <!-- Links injected dynamically via JS -->
+    </section>
+
+    <!-- Profile Comments / Chatbox (Steam Style) -->
+    <section class="comments-card" id="commentsCard">
+      <div class="comments-header">
+        <div class="comments-title">
+          <i class="fa-solid fa-comments"></i>
+          <span>Profile Comments</span>
+          <span class="comment-count" id="commentCount">0</span>
+        </div>
+      </div>
+
+      <!-- Comment Form -->
+      <form id="commentForm" class="comment-form">
+          <input type="text" id="commentAuthor" class="form-input" placeholder="Your name">
+        </div>
+        <div class="comment-input-row">
+          <div class="input-with-counter flex-grow">
+            <input type="text" id="commentText" class="form-input" placeholder="Leave a comment..." required maxlength="50">
+            <span class="char-count" id="textCounter">0/50</span>
+          </div>
+          <button type="submit" class="btn-comment-submit" title="Post Comment">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Comments List -->
+      <div class="comments-list" id="commentsList">
+        <!-- Comments loaded via JavaScript -->
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="pagination-container" id="paginationControls">
+        <button type="button" class="btn-pagination" id="prevPageBtn" disabled>
+          <i class="fa-solid fa-chevron-left"></i> Prev
+        </button>
+        <span class="page-indicator" id="pageIndicator">Page 1 of 1</span>
+        <button type="button" class="btn-pagination" id="nextPageBtn" disabled>
+          Next <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="profile-footer">
+      <p>© <span id="year"></span> <span id="footerName">FrizyFox</span>. All rights reserved.</p>
+    </footer>
+
+  </main>
+
+  <!-- Live Customizer Drawer Modal -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="customizerDrawer">
+    <div class="drawer-header">
+      <h3><i class="fa-solid fa-pen-to-square"></i> Customize Profile</h3>
+      <button class="close-btn" id="closeDrawerBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </aside>
+
+  <!-- Toast Notification Container -->
+  <div class="toast" id="toast">Link copied to clipboard!</div>
+
+  <!-- Firebase App & Firestore SDKs (v10 modular loaded via type="module") -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      query, 
+      orderBy, 
+      onSnapshot, 
+      serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4ruS-Alvgv-6JIGwx1wLJCXSQRi68FzM",
+      authDomain: "my-website-yippe.firebaseapp.com",
+      projectId: "my-website-yippe",
+      storageBucket: "my-website-yippe.firebasestorage.app",
+      messagingSenderId: "152472063406",
+      appId: "1:152472063406:web:a02f95f33f3ce525424c3f",
+      measurementId: "G-JCYM7557B8"
+    };
+
+    // Initialize Firebase & Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Make Firestore functions accessible to script.js
+    window.db = db;
+    window.firebaseFS = { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp };
+  </script>
+
+  <!-- External Script File -->
+  <script src="script.js"></script>
+</body>
+</html>
